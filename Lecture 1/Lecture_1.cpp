@@ -5,14 +5,30 @@ using namespace std;
 
 const double PI = 3.1415927; //creation and assignment of values on the global scope
 int main(){
+    string cont;
+    do {
+        cout << "Would you like to try again?(y/n)";
+        cin >> cont;
+    } while (cont[0]=='Y' || cont[0]=='y');
+    
+    /*
+    LESSON 2
     int count = 0;
     while (count < 100 ){
         cout << count << ": Hello world" << endl;
         count++; //often forgotten
     }
-    
+    // initializing ; condition; incrementation
     for (int count =1; count <=100; count++)
         cout << count << ": Hellow world" << endl;
+
+    for (;count<105;count++)
+        cout << count << ": Heyur world" << endl;
+
+    for (;;) {
+        cout << "Hello world!!" << endl;
+        break;
+    }
 
     string cont = "yes";
     while (cont[0]=='Y' || cont[0]=='y'){
@@ -36,36 +52,39 @@ int main(){
         cout << "Continue? ";
         cin >> cont;
 
-    }
+    } */
+    /*
+    LESSON 1
+
+    cout << "Hello" << " " << "World" << endl;
+    cout << "Second Line!" << endl;
+    int age = INT_MAX;
+    age++; // if there is a possibility that your number exceeds intmax, it will loop around
+    cout << "Age at its highest number: " << age <<endl;
+    double pi = 3.1415927; //creation and assignment of a variable
+    char c = 'D'; // single quote for a character and single quotes for strings
+
+    cout << "this is a character: " << c << endl;
+    bool torF = true;
+
+    cout << "this is a boolean: " << torF << endl;
+    string name = "Kori Vernon";
+    cout << "this is a string: " << name << endl;
+    cout << "The area of a circle with radius 2: " << (2 * 2 * PI) << endl;
+
+    cout << "What is your age? ";
+    cin >> age; //asking for an integer
+    cout << "Your age is: " << age << endl;
+
+    double amount;
+    amount = age;
+
+    amount += 0.99999;
+
+    age = amount;
     
-    // cout << "Hello" << " " << "World" << endl;
-    // cout << "Second Line!" << endl;
-    // int age = INT_MAX;
-    // age++; // if there is a possibility that your number exceeds intmax, it will loop around
-    // cout << "Age at its highest number: " << age <<endl;
-    // double pi = 3.1415927; //creation and assignment of a variable
-    // char c = 'D'; // single quote for a character and single quotes for strings
-
-    // cout << "this is a character: " << c << endl;
-    // bool torF = true;
-
-    // cout << "this is a boolean: " << torF << endl;
-    // string name = "Kori Vernon";
-    // cout << "this is a string: " << name << endl;
-    // cout << "The area of a circle with radius 2: " << (2 * 2 * PI) << endl;
-
-    // cout << "What is your age? ";
-    // cin >> age; //asking for an integer
-    // cout << "Your age is: " << age << endl;
-
-    // double amount;
-    // amount = age;
-
-    // amount += 0.99999;
-
-    // age = amount;
-    
-    // cout << "age: " << age << ", amount: " << amount << endl;
-    // // amount will "round down" double will "round up"
+    cout << "age: " << age << ", amount: " << amount << endl;
+    // amount will "round down" double will "round up"
+    */
 }
 
