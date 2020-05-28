@@ -1,0 +1,4 @@
+Betty	100	99
+Tom	60	70
+Kori	70	90
+Joey	100	100
