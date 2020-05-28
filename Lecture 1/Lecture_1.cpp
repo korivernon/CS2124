@@ -41,7 +41,7 @@ int main(){
         double contrib;
         cin >> contrib;
 
-        if(age >= 21 && contrib>=100) {
+        if (age >= 21 && contrib >= 100) {
             cout << "Welcome to the club!" << endl;
         } else if (!(age >= 21)) {
             cout << "You aren't old enough jit" << endl;
@@ -52,7 +52,9 @@ int main(){
         cout << "Continue? ";
         cin >> cont;
 
-    } */
+    } 
+    */
+
     /*
     LESSON 1
 
