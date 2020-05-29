@@ -3,7 +3,7 @@
 #include<fstream>
 #include<stdlib.h>
 #include<time.h>
-
+#include<vector>
 using namespace std;
 
 // task 1
@@ -46,7 +46,7 @@ void randomPassword(int choice){
     string temp;
     int prep;
     int randNum;
-    stringstream ss;
+   
     // read into file
     inFile.open("2124 Lab1 - 57pwordlist.txt");
 
@@ -84,8 +84,7 @@ void randomPassword(int choice){
         randNum = rand() % 999 + 100;
     }
     // append random number 
-    ss << randNum;
-    string add = ss.str();
+    auto add = to_string(randNum);    
     // append to the back
     if (choice > 0){
         // append
@@ -96,11 +95,73 @@ void randomPassword(int choice){
         random = add + random;
     }
     cout << "Your randomly generated password is: " << random << endl;
+}
+
+// Task 4
+struct Employee{
+    int id;
+    double payRate;
+    string name;
+    int hours;
+    double totalPay;
+
+    double getPay(){
+        totalPay = hours * payRate;
+        return totalPay;
+    }
+    int getID(){
+       return id; 
+    }
+};
+void readInDataFile(vector<Employee>& employeeVec){
+    ifstream data;
+    ifstream hourly;
+    
+    data.open("data.txt");
+    hourly.open("hourly.txt");
+    int hours;
+    int id;
+    double payRate;
+    string name;
+    if(!data){
+        cout << "Incorrect data file." << endl;
+    }
+    if(!hourly){
+        cout << "Incorrect hourly file." << endl;
+    }
+
+    while(data >> id >> payRate >> name){
+        Employee temp;
+        temp.id = id;
+        temp.payRate = payRate;
+        temp.name = name;
+        employeeVec.push_back(temp);
+    }
+    while(hourly >> id >> hours){
+        for (int i=0; i < employeeVec.size(); i++){
+            if (employeeVec[i].id == id){
+                employeeVec[i].hours += hours;
+            }
+        }
+    }
+}
+
+void sortAndReturn(vector<Employee>& employeeVec){
+    sort(employeeVec.)
+}
+
 int main(){
     // test code for Task 2
     mathCPP();
     // test code for Task 3
-    cout << "randomPassword(0) = " << randomPassword(0) << endl; 
-    cout << "randomPassword(1) = " << randomPassword(1) << endl;
-    cout << "randomPassword(-1) = " << randomPassword(-1) << endl;
+    cout << "randomPassword(0) = ";
+    randomPassword(0);
+    cout << endl; 
+    cout << "randomPassword(1) = ";
+    randomPassword(1);
+    cout << endl;
+    cout << "randomPassword(-1) = ";
+    randomPassword(-1);
+    cout << endl;
+    readInDataFile();
 }
