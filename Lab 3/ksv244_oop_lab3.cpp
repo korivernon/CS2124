@@ -70,27 +70,24 @@ void resizecstr(char*& cstr, int& oldsz, const int newsz){
 }
 
 bool isPalindrome(const char* cstr){
-   int i = 0;
-   int j;
-   j = strlen(cstr)-1; // get the length of the string
-   // just make a copy and compare...
-   cout << "LENGTH: " << j << endl;
-   if ((cstr==NULL)|| cstr[0]=='\0')
-       return false;
-   cout << j << endl;
-   while(i < j){
-       // this should account for odd numbers as well
-       if (cstr[i]!=cstr[j]){
-           cout << "inside while" << endl;
-           return false; // if at any point in time this is the case then break
-       }
-       else{
-           cout << "iinside while:" << endl;
-           i++;
-           j--;
-       }
-   }
-   return true;
+    const size_t len = strlen(cstr);
+
+    char * cstr1 = new char[sizeof(cstr)];
+    //copy the string
+    for (int i = 0; i<len; i++){
+        cstr1[i] = cstr[i];
+    }
+    // reverse the string
+    for(int i=0;i<sizeof(cstr1)/2;i++){
+        swap(cstr1[i], cstr1[sizeof(cstr1)-i-1]);
+    }
+    //check the indexes
+    for(int i = 0; i < len; i++) {
+        if (cstr[i] != cstr1[i]){
+            return false;
+        }
+    }
+    return true;
 }
 void addcstr(){
     // initialize with term character

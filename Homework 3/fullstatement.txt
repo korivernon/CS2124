@@ -1,0 +1,17 @@
+========Bank Statement========
+Previous Account Balance: $1906.23
+Total Cashed: $18374.29
+Total Deposited: $89.23
+New Account Balance: $1995.46
+==============================
+Checks not Cashed: 
+Check Number: 1989343
+Amount: $89.23
+Cashed: No
+
+Cashed Checks: 
+Check Number: 29408547
+Amount: $18374.29
+Cashed: Yes
+
+==============================
