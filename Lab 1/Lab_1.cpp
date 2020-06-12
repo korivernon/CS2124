@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include<algorithm>
 #include<fstream>
 #include<stdlib.h>
 #include<time.h>
@@ -41,8 +42,8 @@ void randomPassword(int choice){
     string random;
     int oneToThree;
     int generateRandom;
-    srand (time (NULL));
-    vector<int> fileVec;
+    srand ((unsigned)time (NULL));
+    vector<string> fileVec;
     string temp;
     int prep;
     int randNum;
@@ -59,7 +60,9 @@ void randomPassword(int choice){
     generateRandom = rand() % 57 +1;
     // add passwords 5-7 characters to fileVec
     while(inFile >> temp ){
-        fileVec.push_back(temp);
+        string tmp;
+        tmp = temp;
+        fileVec.push_back(tmp);
     }
     // choose the generateRandom'th index
     random = fileVec[generateRandom];
@@ -84,7 +87,7 @@ void randomPassword(int choice){
         randNum = rand() % 999 + 100;
     }
     // append random number 
-    auto add = to_string(randNum);    
+    string add = to_string(randNum);    
     // append to the back
     if (choice > 0){
         // append
@@ -105,12 +108,22 @@ struct Employee{
     int hours;
     double totalPay;
 
-    double getPay(){
-        totalPay = hours * payRate;
-        return totalPay;
+    double getPay() const{
+        return hours * payRate;
+         
     }
     int getID(){
        return id; 
+    } 
+    void addHours(int hoursm){
+        hours = hours + hoursm;
+    }
+    string display() const {
+        string idStr = to_string(id);
+        string totalPayStr = to_string(hours*payRate);
+        string retString;
+        retString = name + " " + idStr + " " + totalPayStr;
+        return retString;
     }
 };
 void readInDataFile(vector<Employee>& employeeVec){
@@ -133,35 +146,71 @@ void readInDataFile(vector<Employee>& employeeVec){
     while(data >> id >> payRate >> name){
         Employee temp;
         temp.id = id;
+        cout << "id = " << name << endl;
         temp.payRate = payRate;
         temp.name = name;
         employeeVec.push_back(temp);
     }
     while(hourly >> id >> hours){
+        cout << "hours" << hours << endl;
         for (int i=0; i < employeeVec.size(); i++){
+            cout << "id" << employeeVec[i].id << "idnum" << id << endl;
             if (employeeVec[i].id == id){
-                employeeVec[i].hours += hours;
+                cout << "id = " << id << "hours" << hours;
+                employeeVec[i].addHours(hours);
             }
         }
     }
 }
-
-void sortAndReturn(vector<Employee>& employeeVec){
-    sort(employeeVec.)
+bool comp(const Employee& a, const Employee& b){
+    return a.getPay() > b.getPay();
 }
+void displayVector(const vector<Employee>& employeeVec){
+    for(int i = 0; i < employeeVec.size(); i++){
+        cout << employeeVec[i].display() << endl;
+    }
+}
+void sortVec(vector<Employee>& employeeVec){ 
+    sort(employeeVec.begin(), employeeVec.end(), comp);
+}
+void task2(){
 
-int main(){
     // test code for Task 2
-    mathCPP();
+    mathCPP(); 
+}
+void task3(){
+
     // test code for Task 3
     cout << "randomPassword(0) = ";
     randomPassword(0);
-    cout << endl; 
+   
     cout << "randomPassword(1) = ";
     randomPassword(1);
-    cout << endl;
-    cout << "randomPassword(-1) = ";
-    randomPassword(-1);
-    cout << endl;
-    readInDataFile();
+    
+    cout << "randomPassword(-4) = ";
+    randomPassword(-4);
+}
+
+void output(vector<Employee>& employeeVec){
+    ofstream out;
+    out.open("payroll.txt");
+    if (!open){
+        cout << "Error " << endl;
+    }
+    for (int i=0; i < employeeVec.size(); i++){
+        out << employeeVec[i].id << "\t" << employeeVec[i].name << employeeVec[i].getPay() << endl;
+    }
+}
+int main(){
+    // testcode for Task 4
+    vector<Employee> employeeVec;
+    readInDataFile(employeeVec);
+    cout << "BEFORE: " << endl;
+    displayVector(employeeVec);
+    cout << "AFTER: " << endl;
+    sortVec(employeeVec);
+    displayVector(employeeVec);
+    cout << employeeVec.size() << endl;
+    cout << "Done" << endl;
+    output(employeeVec);
 }
