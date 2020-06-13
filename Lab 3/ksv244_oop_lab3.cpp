@@ -109,7 +109,6 @@ void addcstr(){
     } while (cont == 'Y' || cont == 'y');
     cout << "Your word is: ";
     output(cstr, size);
-    cout << isPalindrome(cstr);
     if (isPalindrome(cstr)==true)
         cout << "Is palindrome." << endl;
     else
@@ -207,5 +206,7 @@ int main(){
     
     cout << "Task 10: " << endl;
     
+    // to test use this function. 
     addcstr();
+
 }
