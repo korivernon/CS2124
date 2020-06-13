@@ -10,48 +10,44 @@ class Adopter;
 class Pet {
     private:
         string name;
-        vector<Adopter> ad;
+        vector<Adopter*> ad;
+        vector<string> names;
     public:
         friend class Adopter;
-        Pet(string newname ) : name(newname) {
-            vector<Adopter> ado;
-            ad = ado;
-        }
+        Pet(const string& newname) : name(newname) {} 
         void setName(const string newname){name = newname;}
-        string getName() const {return name;}
-        int numberOfAdopters() const {return ad.size();}
-        vector<string> getAdopterNames() const {
-            vector<string> names;
-            for (int i = 0; i < ad.size(); i++){
-                names.push_back(ad[i].getName());
-            }
-            return names;
-        }
+        const string& getName() const {return name;}
+        size_t numberOfAdopters() const {return ad.size();}
+        vector<string> getAdopterNames();
 };
 
+vector<string> Pet::getAdopterNames() {
+    return names;
+}
 class Adopter {
     private:
         string name;
-        Pet petnm;
-        bool haspet;
+        Pet* petnm;
     public:
-        friend class Pet;
-        Adopter(string newname) : name(newname) , haspet(false) {}
-        Adopter(){haspet = false;}
-        void setName(const string newname){name = newname; }
-        string getName() const {return name; }
-        bool isAdopting() const {return haspet;}
-        bool adopt(const Pet& newpetnm){ 
-            if (haspet==true){
-                return false;
-            }
-            else {
-                petnm = newpetnm;
-                return true;
-            }
+        Adopter(const string& newname = "") : name(newname) , petnm(nullptr) {}
+        void setName(const string newname){ name = newname; }
+        string getName() const {return petnm->name; }
+        bool isAdopting() const {
+            if (petnm)return true;
+            return false;
         }
-        string getPetName() const {return petnm.getName();} //assuming we will always have a pet name
+        string getPetName() const {return petnm->getName();} //assuming we will always have a pet name 
+        bool adopt(Pet& newpetnm);
 };
+
+bool Adopter::adopt(Pet& newpetnm){ 
+    if (petnm) return false;
+    newpetnm.names.push_back(name); // pushing to pet list
+    newpetnm.ad.push_back(this);
+    petnm = &newpetnm;
+    return true;
+}
+
 int main(){
     Adopter betty("Betty");
     Adopter tom("Tom");
