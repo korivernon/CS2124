@@ -5,6 +5,30 @@
 
 using namespace std;
 
+class Adopter;
+
+class Pet {
+    private:
+        string name;
+        vector<Adopter> ad;
+    public:
+        friend class Adopter;
+        Pet(string newname ) : name(newname) {
+            vector<Adopter> ado;
+            ad = ado;
+        }
+        void setName(const string newname){name = newname;}
+        string getName() const {return name;}
+        int numberOfAdopters() const {return ad.size();}
+        vector<string> getAdopterNames() const {
+            vector<string> names;
+            for (int i = 0; i < ad.size(); i++){
+                names.push_back(ad[i].getName());
+            }
+            return names;
+        }
+};
+
 class Adopter {
     private:
         string name;
@@ -30,29 +54,6 @@ class Adopter {
         }
         string getPetName() const {return petnm.getName();} //assuming we will always have a pet name
 };
-
-class Pet {
-    private:
-        string name;
-        vector<Adopter> ad;
-    public:
-        friend class Adopter;
-        Pet(string newname ) : name(newname) {
-            vector<Adopter> ado;
-            ad = ado;
-        }
-        void setName(const string newname){name = newname;}
-        string getName() const {return name;}
-        int numberOfAdopters() const {return ad.size();}
-        vector<string> getAdopterNames() const {
-            vector<string> names;
-            for (int i = 0; i < ad.size(); i++){
-                names.push_back(ad[i].getName());
-            }
-            return names;
-        }
-};
-
 int main(){
     Adopter betty("Betty");
     Adopter tom("Tom");
