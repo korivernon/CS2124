@@ -36,9 +36,7 @@ class Adopter {
         bool haspet;
     public:
         friend class Pet;
-        Adopter(string newname) : name(newname) {
-            haspet = false;
-        }
+        Adopter(string newname) : name(newname) , haspet(false) {}
         Adopter(){haspet = false;}
         void setName(const string newname){name = newname; }
         string getName() const {return name; }
