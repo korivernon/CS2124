@@ -40,8 +40,11 @@ StringSet::StringSet(string * arr, size_t newsize){
 StringSet StringSet::operator*(const StringSet& self){
     StringSet temp;
     temp.resize(size+self.size);//go ahead and make the capacity both
-    for(int i = 0; i < size; i++)
+    for(int i = 0; i < size; i++){
+        //cout << "adding: " << set[i] << endl;
         temp.add(set[i]); // we can add everything in here, assuming that there will be no duplicates
+    }
+    
     for(int i = 0; i < self.size;i++){
         //our add function already accounts for duplicates, but we can take care of them again anyways
         if (!temp.inset(self.set[i]))
@@ -87,8 +90,9 @@ void StringSet::add(const string& add){
         resize(cap*2);
     if (!inset(add))
         set[size++] = add;
-    else
+   /* else
         cout << "String already in set. " << endl;
+        */
 }
 void StringSet::remove(const string& rm){
     if (!inset(rm)) //assuing there will only be one string that we are removing and not multiple --  the first instance of the string will be removed
