@@ -32,12 +32,26 @@ public:
     Fraction operator+(const Fraction& self);
     Fraction operator*(const Fraction& self);
     Fraction operator/(const Fraction& self);
-    
-    Fraction operator++(){
+/*
+    bool operator<(const Fraction& self, const Fraction& other);
+    bool operator>(const Fraction& self, const Fraction& other);
+    bool operator<=(const Fraction& self, const Fraction& other);
+    bool operator>=(const Fraction& self, const Fraction& other);
+    bool operator==(const Fraction& self, const Fraction& other);
+    bool operator!=(const Fraction& self, const Fraction& other);
+*/    
+    int& operator*() {return num;}
+    int operator*() const {return num;}
+    int operator[](const int& val) {return num+val;}
+    int operator[](const int& val) const {return num + val;}
+
+    Fraction& operator++(){
+        //pre increment returns a pointer
         num += denom;
         return *this;
     }
     Fraction operator++(int){
+
         Fraction frac(this->num, this->denom);
         num +=denom;
         return frac;
@@ -51,6 +65,25 @@ public:
     */
     
 };
+
+bool operator<(const Fraction& self, const Fraction& other){
+    return self.getDouble() < other.getDouble();
+}
+bool operator>(const Fraction& self, const Fraction& other){
+    return other < self;
+}
+bool operator<=(const Fraction& self, const Fraction& other){
+    return !(other < self);
+}
+bool operator>=(const Fraction& self, const Fraction& other){
+    return !(self < other);
+}
+bool operator==(const Fraction& self, const Fraction& other){
+    return !(other < self || self < other);
+}
+bool operator!=(const Fraction& self, const Fraction& other){
+    return other < self || self < other;
+}
 int Fraction::gcd(int a, int b) const {
     if(b==0)
         return a;
@@ -137,6 +170,14 @@ Fraction::Fraction(double val){
 int main(){
     int x = 5;
     int y = 6;
+    y = ++x;
+    cout << x << endl;
+    cout << y << endl; //new value of x;
+
+    x = 5;
+    y = x++;
+    cout << x << endl;
+    cout << y << endl; //original value of x
     cout <<( (x < y) ? y : x ) << endl;
     Fraction f1(5,2);
     Fraction f2(3,4);

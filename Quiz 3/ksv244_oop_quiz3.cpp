@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 void sortMe(int*& arr, const int size){
     // declare a temporary array
     int * tempa = new int[size];
@@ -23,7 +24,6 @@ void sortMe(int*& arr, const int size){
     delete [] arr;
     arr = tempa;
 }
-
 int main(){
     int * arr = new int[10];
     for (int i=0; i < 10; i++){
