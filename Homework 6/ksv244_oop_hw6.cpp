@@ -6,12 +6,15 @@ using namespace std;
 
 class StringSet {
     private:
+        // double weight; // kg -> 90.9
+        // int dob; // 07232000
+        // string name; // kori
         string *set;
         size_t size,cap;
         void resize(const size_t& newsize); // helper function to resize the array
         bool inset(const string& str); // helper function to tell us if an element is inide
     public:
-        StringSet(string * arr, size_t newsize);
+        StringSet(string arr []);
         StringSet():set(new string[5]),size(0),cap(5){} //default constructor
         //copy control
         //~StringSet(){delete [] set;}
@@ -52,21 +55,25 @@ bool StringSet::inset(const string& str){
     }
     return false;
 }
-StringSet::StringSet(string * arr, size_t newsize){
-    string * temp = new string[newsize];
-    size = newsize;
-    for (size_t i = 0; i < newsize; i++){
-        temp[i] = arr[i];
-    }
+StringSet::StringSet(string arr []){
+    cap = 5;
+    int i = 0;
+    int count = 0;
+    string * temp = new string[cap];
     set = temp;
-        /*
-    cout << arr[0] << endl; 
-    cout << *(&arr+1)-arr << endl;
-    cout << sizeof(arr)<< endl;
-    cout << &arr[1] << endl;
-    cout << &arr+1 << endl;
-    printf("Length of arr: %d\n",sizeof(arr)/sizeof(string));
-    */
+    while (arr[i] != "-1"){
+        if (i == cap){
+            resize(2*cap);
+        }
+        cout << ++count << endl;
+        set[i] = arr[i];
+        size++;
+        i++;
+    }
+    /*
+    for (size_t i = 0; i < newsize; i++){
+        set[i] = arr[i];
+    }*/
 }
 StringSet StringSet::operator*(const StringSet& self){
     StringSet temp;
@@ -150,11 +157,16 @@ void StringSet::clear() {
     size = cap = 0; //assuming that nothing will be readded
 }
 int main(){
-    std::string * set = new std::string[4];
+    std::string set[5];
     set[0] = "give";
     set[1] = "me";
     set[2] = "a";
     set[3] = "sixty-nine%";
+    set[4] = "-1";
+    StringSet kori(set);
+    cout << kori << endl;
+    cout << kori.sizeset() << endl;
+    /*
     StringSet kori(set,4);
     std::cout << "StringSet 1: " << kori << std::endl;
     kori[3] = "100%";
@@ -184,7 +196,7 @@ int main(){
     cout << "qin" << qin << endl;
     std::cout << "Adding Together: " << qin << std::endl;
     StringSet katz = kori + xinyu;
-    std::cout << "Intersection: " << katz << std::endl;
+    std::cout << "Intersection: " << katz << std::endl;*/
     //kori.clear();
     //std::cout << "Cleared Function: " << kori << std::endl;
     //delete [] set;
