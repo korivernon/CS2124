@@ -17,7 +17,7 @@ class StringSet {
         StringSet(string arr []);
         StringSet():set(new string[5]),size(0),cap(5){} //default constructor
         //copy control
-        //~StringSet(){delete [] set;}
+        ~StringSet(){delete [] set;}
         StringSet& operator=(const StringSet& self);
         StringSet(const StringSet* self):set(nullptr){*this = self;}
         //pop, and remove, and add functions
