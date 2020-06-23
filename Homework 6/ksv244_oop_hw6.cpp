@@ -12,7 +12,7 @@ class StringSet {
         string *set;
         size_t size,cap;
         void resize(const size_t& newsize); // helper function to resize the array
-        bool inset(const string& str); // helper function to tell us if an element is inide
+        bool inSet(const string& str) const; // helper function to tell us if an element is inide
     public:
         StringSet(string arr []);
         StringSet():set(new string[5]),size(0),cap(5){} //default constructor
@@ -48,42 +48,32 @@ StringSet& StringSet::operator=(const StringSet& self){
         set[i] = self.set[i];
     return *this; // return *this
 }
-bool StringSet::inset(const string& str){
+bool StringSet::inSet(const string& str) const{
     for(size_t i = 0; i < size; i++ ){
         if(set[i] == str)
             return true;
     }
     return false;
 }
-StringSet::StringSet(string arr []){
-    cap = 5;
+StringSet::StringSet(string arr []) : cap(5), size(0), set(new string[5]) {
     int i = 0;
-    int count = 0;
-    string * temp = new string[cap];
-    set = temp;
     while (arr[i] != "-1"){
         if (i == cap){
             resize(2*cap);
         }
-        cout << ++count << endl;
         set[i] = arr[i];
         size++;
         i++;
     }
-    /*
-    for (size_t i = 0; i < newsize; i++){
-        set[i] = arr[i];
-    }*/
 }
 StringSet StringSet::operator*(const StringSet& self){
     StringSet temp;
     temp.resize(size+self.size);//go ahead and make the capacity both
-    for(int i = 0; i < size; i++)
-        temp.add(set[i]); // we can add everything in here, assuming that there will be no duplicates
-    for(int i = 0; i < self.size;i++){
-        //our add function already accounts for duplicates, but we can take care of them again anyways
-        if (!temp.inset(self.set[i]))
+    for(int i = 0; i < size; i++){
+        if (self.inSet(set[i])){
+            cout << "adding: " << set[i] << endl;
             temp.add(self.set[i]);
+        }
     }
     return temp;
 }
@@ -123,13 +113,13 @@ void StringSet::resize(const size_t& newsize){
 void StringSet::add(const string& add){
     if (size == cap)
         resize(cap*2);
-    if (!inset(add))
+    if (!inSet(add))
         set[size++] = add;
     else
         cout << "String already in set. " << endl;
 }
 void StringSet::remove(const string& rm){
-    if (!inset(rm)) //assuing there will only be one string that we are removing and not multiple --  the first instance of the string will be removed
+    if (!inSet(rm)) //assuing there will only be one string that we are removing and not multiple --  the first instance of the string will be removed
         cout << "Error: Element does not exist." << endl;
     else {
         bool found = false;
@@ -166,8 +156,8 @@ int main(){
     StringSet kori(set);
     cout << kori << endl;
     cout << kori.sizeset() << endl;
-    /*
-    StringSet kori(set,4);
+    
+    
     std::cout << "StringSet 1: " << kori << std::endl;
     kori[3] = "100%";
     std::cout << "SIIIIIKE";
@@ -182,21 +172,35 @@ int main(){
     std::cout << kori.pop() << std::endl;
     std::cout << "Pop from back: " << kori << std:: endl;
     std::cout << kori.sizeset() << std::endl;
-    std::string * set2 = new std::string[5];
+    kori.add("give");
+
+    string set2[6];
     set2[0] = "give";
     set2[1] = "I'll";
     set2[2] = "think";
     set2[3] = "about";
     set2[4] = "pun";
+    set2[5] = "-1";
     cout << "hi" << endl;
-    StringSet xinyu(set2,5);
+    StringSet xinyu(set2);
+    
+
     cout << "xinyu: " << xinyu << endl;
     StringSet qin;
     qin = kori + xinyu;
     cout << "qin" << qin << endl;
     std::cout << "Adding Together: " << qin << std::endl;
-    StringSet katz = kori + xinyu;
-    std::cout << "Intersection: " << katz << std::endl;*/
+
+    cout << kori << endl;
+    cout << xinyu << endl; 
+    StringSet katz;
+    katz = kori * xinyu;
+
+    std::cout << "Intersection: " << katz << std::endl;
+    cout << katz.sizeset() << endl;
+    cout << katz << endl;
+    katz.add("kori"); // this is being added but the element before isn't
+    cout << katz[1] << endl;
     //kori.clear();
     //std::cout << "Cleared Function: " << kori << std::endl;
     //delete [] set;
