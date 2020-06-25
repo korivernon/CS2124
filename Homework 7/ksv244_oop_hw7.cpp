@@ -15,7 +15,7 @@ class Organism {
             moves = v;
             LocVec(); // load the vector
         }
-        virtual vector<int> move() = 0;
+        virtual void move() = 0;
         virtual char value() const = 0;
         int getLocation() const {return location;}
         void setLocation(const int& loc);
@@ -54,7 +54,7 @@ class Ant : public Organism {
     public:
         Ant(const int& loco) : Organism(loco), iter(0) {} 
         //void reproduce(); // how do i create another object and place inside this function
-        vector<int> move();
+        void move();
         char value() const {return 'o';} //returns the value
         int getIter() const {return iter;} // get the value of the iteration
         friend ostream& operator<<(ostream& outs, const Ant& ant);
@@ -64,24 +64,24 @@ ostream& operator<<(ostream& outs, const Ant& ant){
     return outs;
 }
 
-vector<int> Ant::move(){
-    LocVec(); // call the location vector
+void Ant::move(){
+    // LocVec(); // call the location vector doesn't necessarily need to be called
     if (iter == 3){
         // automatic reset at three
         //reproduce();
         iter = 0;
     }
     iter++;
-    return moves; // returning location vector so we can decide to move later
+    // return moves; // returning location vector so we can decide to move later
 }
 class Board {
     private:
         char ** score;
-        vector<Organism*> orgs;
+        vector<Ant> ants;
     public:
         Board() : score(new char * [20]){
-            vector<Organism*> o;
-            orgs = o; // initialize vector
+            vector<Ant> a;
+            ants = a; // initialize vector
             for (size_t i = 0; i < 20; ++i){
                 score[i] = new char[20];
             }
@@ -89,9 +89,9 @@ class Board {
         int randomize() const;
         bool occupied(const int& elem) const; // is that place occupied
         void place(const int& location, const char& org);
-        void place_org(Organism& org);
+        void place_org(Ant& org);
         void passTime();
-        void move(Organism& org);
+        void move(Ant& org);
         
         bool getUp(const int& elem) const;
         bool getDown(const int& elem) const;
@@ -105,17 +105,20 @@ class Board {
         void loadBoard();
         void printBoard() const;
 };
+
 void Board::passTime(){
-    cout << "orgs size: " << orgs.size() << endl;
+    cout << "orgs size: " << ants.size() << endl;
+    //cout << "orgs elem " << orgs[0]->value() << endl;
     //move(orgs[0]);
     // move(*orgs[0]);
-   /* for(size_t i = 0; i < orgs.size(); i++){
-        move(*orgs[i]);
-    }*/
+   for(size_t i = 0; i < ants.size(); i++){
+        cout << i << endl;
+        move(ants[i]);
+    }
 }
-void Board::place_org(Organism& org){ //assuming we will always get a valid place
+void Board::place_org(Ant& org){ //assuming we will always get a valid place
     score[org.getLocation()%20][org.getLocation()/20] = org.value();
-    orgs.push_back(&org);
+    ants.push_back(org);
 }
 vector<char> Board::nextToMe(const Organism& org){
     //returns a vector of eveyrthing next to an element... similar to getUp,getDown,getLeft, and getRight
@@ -133,18 +136,17 @@ vector<char> Board::nextToMe(const Organism& org){
     }
     return aroundMe;
 }
-void Board::move(Organism& org){
+void Board::move(Ant& org){
     int count = 0;
     vector<int> moveVec;
-    moveVec = org.move(); // so we don't call the location vector function every time inside of the function... not the wave
     
+    for (size_t i = 0; i < 5; i++){
+        moveVec.push_back(org.getVal(i));
+    }
     vector<char> ntm;
     ntm = nextToMe(org);
 
-    vector<int> validLoc;
-
     vector<int> chooserand; // choose a random place for it to go
-    
     srand(time(NULL));
     if (org.value() == 'o'){ // if it's an ant
         for (size_t i = 0; i < ntm.size(); i++){
@@ -152,13 +154,8 @@ void Board::move(Organism& org){
             // <[68,70,49,89],69> 
             //<left,right,up,down, current location>
             if (ntm[i] != 'b' || ntm[i] != 'o' || ntm[i] != 'X'){
-                validLoc.push_back(moveVec[i]);
                 chooserand.push_back(i);
-            } 
-            else {
-                validLoc.push_back(-1); // push back a negative 1 if it's an invalid location
             }
-            // valid loc <-1,45,67,8>
             // chooserand <24,67,8>
         }
         int num = rand() % (chooserand.size()-1) + 0;
