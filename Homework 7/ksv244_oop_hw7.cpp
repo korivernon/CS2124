@@ -139,31 +139,38 @@ vector<char> Board::nextToMe(const Organism& org){
 void Board::move(Ant& org){
     int count = 0;
     vector<int> moveVec;
+    srand(time(NULL));
     
     for (size_t i = 0; i < 5; i++){
         moveVec.push_back(org.getVal(i));
     }
     vector<char> ntm;
     ntm = nextToMe(org);
-
+    for (int i: moveVec)
+        cout << i << " ";
+    cout << endl;
     vector<int> chooserand; // choose a random place for it to go
-    srand(time(NULL));
+    
     if (org.value() == 'o'){ // if it's an ant
         for (size_t i = 0; i < ntm.size(); i++){
             //location vector has form 
             // <[68,70,49,89],69> 
             //<left,right,up,down, current location>
             if (ntm[i] != 'b' || ntm[i] != 'o' || ntm[i] != 'X'){
-                chooserand.push_back(i);
+                chooserand.push_back(moveVec[i]);
             }
             // chooserand <24,67,8>
         }
         int num = rand() % (chooserand.size()-1) + 0;
+        cout << "size: " << chooserand.size() << "randnum: " << num << endl;
         if(chooserand.size() != 0){
             org.setLocation(num); //set the location of the organism
             place_org(org); //place the organism on the board
-            place(moveVec[4],'-'); // put a dash in the previous location
-            cout << "successfully moved! " << endl;
+            place(moveVec[4],'r'); // put a dash in the previous location
+            for (int i = 0;i < chooserand.size(); i++)
+                cout << chooserand[i] << " ";
+            cout << endl;
+            printBoard();
         }
 
     }
@@ -240,7 +247,7 @@ int main() {
     
     Board ecosystem;
     ecosystem.loadBoard();
-    for (int i = 0; i < 100; i++){
+    for (int i = 0; i < 5; i++){
         int loc = ecosystem.randomize();
         Ant temp(loc); // load with this location
         ecosystem.place_org(temp); // place the ant here
