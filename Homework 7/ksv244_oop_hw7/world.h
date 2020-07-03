@@ -5,12 +5,12 @@
 
 class Organism;
 class Ant;
-class DoodleBugs;
+class DoodleBug;
 
 class World {
     friend class Organism;
     friend class Ant;
-    friend class DoodleBugs;
+    friend class DoodleBug;
 private:
     char** board;
     std::vector<Organism> org;

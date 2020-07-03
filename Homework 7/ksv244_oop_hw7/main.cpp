@@ -23,9 +23,5 @@ int main() {
     DoodleBug org(loc);
     world.placeDoodleBug(org);
   }
-  
-  world.printBoard();
-
   world.passTime();
-  world.printBoard();
 }

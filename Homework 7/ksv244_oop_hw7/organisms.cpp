@@ -6,14 +6,14 @@
 
 using namespace std;
 
-char Organism::value() const {return 'r';}
-char Ant::value() const {return 'o';}
-char DoodleBug::value() const {return 'X';}
+char Organism::value() const{return 'r';}
+char Ant::value() const{return 'o';}
+char DoodleBug::value() const{return 'X';}
 
 void Organism::setX(const int& newx){x = newx;}
-void Organism::setY(const int& newy) {y = newy;}
-int Organism::getX() const {return x;}
-int Organism::getY() const {return y;}
+void Organism::setY(const int& newy){y = newy;}
+int Organism::getX() const{return x;}
+int Organism::getY() const{return y;}
 
 bool Organism::breed(World& world, const int& dir){
   int newx = 0; int newy = 0; bool bred = false;
@@ -39,7 +39,7 @@ bool Organism::breed(World& world, const int& dir){
       }
     }
     if (bred == true){
-      cout << "Successfully bred" << endl;
+      //cout << "Successfully bred" << endl;
       Organism* org = new Organism(newx,newy);
       world.org.push_back(*org);
       world.board[org->y][org->x] = org->value();
@@ -80,7 +80,6 @@ void Organism::move(World& world,const int& dir){
     }
   }
   iter++;
-  //}
 }
 bool Ant::breed(World& world, const int& dir){
   int newx = 0; int newy = 0; bool bred = false;
@@ -115,17 +114,103 @@ bool Ant::breed(World& world, const int& dir){
   }
   return false;
 }
+//move an ant
 void Ant::move(World& world){
   srand(time(NULL));
   int dir = rand() % 4 + 1;
   Organism::move(world, dir);
-  if (iter >= 3){
+  if (iter >= 3){ // if it's the 3rd time then breed
     //dir = rand() % 4 + 1;
     breed(world, dir);
   }
 }
+//move a doodlebug
+void DoodleBug::move(World& world){
+  bool ate = false; //if ate is equal to false
+  if (world.board[y-1][x] == 'o'){
+    for(int i = 0; i < world.ants.size(); i++){
+      if (world.ants[i].getX() == x && world.ants[i].getY() == y-1){
+        
+        swap(world.ants[i],world.ants[world.ants.size()-1]);
+        world.ants.pop_back();
+        ate = true; notEaten = 0;
+        world.board[y-1][x] = value(); //move the doodlebug to where the ant is
+        world.board[y][x] = '-';
+      }
+    }
+  }
+  else if (world.board[y+1][x] == 'o'){
+    for(int i = 0; i < world.ants.size(); i++){
+      if (world.ants[i].getX() == x && world.ants[i].getY() == y+1){
+        
+        //swap(world.ants[i],world.ants[world.ants.size()-1]);
+        world.ants[i] = world.ants[world.ants.size()-1];
 
-/*
+        world.ants.pop_back();
+        ate = true; notEaten = 0;
+        world.board[y+1][x] = value(); //move the doodlebug to where the ant is
+        world.board[y][x] = '-';
+      }
+    }
+  }
+  else if (world.board[y][x-1] == 'o'){
+    for(int i = 0; i < world.ants.size(); i++){
+      if (world.ants[i].getX() == x-1 && world.ants[i].getY() == y){
+        
+        //swap(world.ants[i],world.ants[world.ants.size()-1]);
+        world.ants[i] = world.ants[world.ants.size()-1];
+
+        world.ants.pop_back();
+        ate = true; notEaten = 0;
+        world.board[y][x-1] = value(); //move the doodlebug to where the ant is
+        world.board[y][x] = '-';
+      }
+    }
+  }
+  else if (world.board[y][x+1] == 'o'){
+    for(int i = 0; i < world.ants.size(); i++){
+      if (world.ants[i].getX() == x+1 && world.ants[i].getY() == y){
+        
+        //swap(world.ants[i],world.ants[world.ants.size()-1]);
+        world.ants[i] = world.ants[world.ants.size()-1];
+
+        world.ants.pop_back();
+        ate = true; notEaten = 0;
+        world.board[y][x+1] = value(); //move the doodlebug to where the ant is
+        world.board[y][x] = '-';
+      }
+    }
+  }
+  
+  if (ate == false){
+    notEaten++;
+    //for some reason this is not deleting the doodlebug correctly
+    if (notEaten == 3){ //starve attribute
+        for(int i = 0; i < world.dbs.size();i++){
+          if(world.dbs[i].getX() == x && world.dbs[i].getY() == y){
+            
+            //swap(world.dbs[i],world.dbs[world.dbs.size()-1]);
+            world.dbs[i] = world.dbs[world.dbs.size()-1];
+
+            world.dbs.pop_back();
+            world.board[y][x] = '-';
+            
+            break;
+          }
+        }
+    }
+    else {
+      srand(time(NULL));
+      int dir = rand() % 4 + 1;
+      Organism::move(world, dir);
+      if (iter >= 8){ // if the iterations are greater than or equal to 8
+          
+          //dir = rand() % 4 + 1;
+          breed(world, dir);
+      }
+    }
+  } else world.board[y][x] = '-'; // redundant but not working for some reason
+}
 bool DoodleBug::breed(World& world, const int& dir){
   int newx = 0; int newy = 0; bool bred = false;
   if (iter >= 8){
@@ -150,7 +235,7 @@ bool DoodleBug::breed(World& world, const int& dir){
       }
     }
     if (bred == true){
-      cout << "Successfully bred" << endl;
+      
       DoodleBug* db = new DoodleBug(newx,newy);
       world.dbs.push_back(*db);
       world.board[db->y][db->x] = db->value();
@@ -160,68 +245,3 @@ bool DoodleBug::breed(World& world, const int& dir){
   }
   return false;
 }
-void DoodleBug::move(World& world){
-  bool ate = false;
-  if (world.board[y-1][x] == 'o'){
-    for(int i = 0; i < world.ants.size(); i++){
-      if (world.ants[i].getX() == x && world.ants[i].getY() == y-1){
-        swap(world.ants[i],world.ants[world.ants.size()-1]);
-        world.ants.pop_back();
-        ate = true; notEaten = 0;
-        world.board[y-1][x] = value();
-      }
-    }
-  }
-  else if (world.board[y+1][x] == 'o'){
-    for(int i = 0; i < ants.size(); i++){
-      if (world.ants[i].getX() == x && world.ants[i].getY() == y+1){
-        swap(world.ants[i],world.ants[world.ants.size()-1]);
-        world.ants.pop_back();
-        ate = true; notEaten = 0;
-        world.board[y+1][x] = value();
-      }
-    }
-  }
-  else if (world.board[y][x-1] == 'o'){
-    for(int i = 0; i < ants.size(); i++){
-      if (world.ants[i].getX() == x-1 && world.ants[i].getY() == y){
-        swap(world.ants[i],world.ants[world.ants.size()-1]);
-        world.ants.pop_back();
-        ate = true; notEaten = 0;
-        world.board[y][x-1] = value();
-      }
-    }
-  }
-  else if (world.board[y][x+1] == 'o'){
-    for(int i = 0; i < world.ants.size(); i++){
-      if (world.ants[i].getX() == x+1 && world.ants[i].getY() == y){
-        swap(world.ants[i],world.ants[world.ants.size()-1]);
-        world.ants.pop_back();
-        ate = true; notEaten = 0;
-        world.board[y][x+1] = value();
-      }
-    }
-  }
-  
-  if (ate == false){
-    notEaten++;
-    if (notEaten == 3){ //starve attribute
-        for(int i = 0; i < world.dbs.size();i++){
-          if(dbs[i].getX() == x && dbs.[i].getY() == y){
-            swap(world.dbs[i],world.dbs[world.dbs.size()-1]);
-            world.dbs.pop_back();
-            world.board[y][x] = '-'
-          }
-        }
-    }
-    else {
-      srand(time(NULL));
-      int dir = rand() % 4 + 1;
-      Organism::move(world, dir);
-      if (iter >= 8){
-          //dir = rand() % 4 + 1;
-          breed(world, dir);
-      }
-    }
-  }  
-}*/

@@ -6,10 +6,11 @@ using namespace std;
 
 void randomize() {
     srand(time(NULL));
+    int location = rand() % 399 + 0; // random number between 399 and 0
     for (int i = 0; i < 20; i++){
         
         
-        int location = rand() % 399 + 0; // random number between 399 and 0
+        location = rand() % 399 + 0; // random number between 399 and 0
         
         cout << location << endl;
     }
